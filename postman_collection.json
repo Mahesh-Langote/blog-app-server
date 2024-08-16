@@ -1,0 +1,322 @@
+{
+    "info": {
+      "name": "Blog API",
+      "description": "Collection for testing the Blog API",
+      "_postman_id": "unique-postman-id",
+      "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "variable": [
+      {
+        "key": "base_url",
+        "value": "http://localhost:5000/api",
+        "type": "string"
+      },
+      {
+        "key": "token",
+        "value": "",
+        "type": "string"
+      }
+    ],
+    "item": [
+      {
+        "name": "Auth",
+        "item": [
+          {
+            "name": "Signup",
+            "request": {
+              "url": "{{base_url}}/auth/signup",
+              "method": "POST",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n    \"name\": \"John Doe\",\n    \"email\": \"john@example.com\",\n    \"password\": \"password123\"\n}"
+              },
+              "description": "Create a new user account"
+            },
+            "response": []
+          },
+          {
+            "name": "Login",
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "exec": [
+                    "var jsonData = pm.response.json();",
+                    "pm.environment.set(\"token\", jsonData.token);"
+                  ],
+                  "type": "text/javascript"
+                }
+              }
+            ],
+            "request": {
+              "url": "{{base_url}}/auth/login",
+              "method": "POST",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n    \"email\": \"john@example.com\",\n    \"password\": \"password123\"\n}"
+              },
+              "description": "Login to user account and store the JWT token"
+            },
+            "response": []
+          }
+        ]
+      },
+      {
+        "name": "Posts",
+        "item": [
+          {
+            "name": "Get All Posts",
+            "request": {
+              "url": "{{base_url}}/posts",
+              "method": "GET",
+              "description": "Retrieve all blog posts with sorting, filtering, and searching",
+              "params": [
+                {
+                  "key": "sort",
+                  "value": "-createdAt,title:asc",
+                  "description": "Sort order (e.g., -createdAt,title:asc for newest first, then by title)",
+                  "disabled": true
+                },
+                {
+                  "key": "category",
+                  "value": "Technology",
+                  "description": "Filter by category",
+                  "disabled": true
+                },
+                {
+                  "key": "author",
+                  "value": "user_id_here",
+                  "description": "Filter by author",
+                  "disabled": true
+                },
+                {
+                  "key": "startDate",
+                  "value": "2023-01-01",
+                  "description": "Filter posts from this date",
+                  "disabled": true
+                },
+                {
+                  "key": "endDate",
+                  "value": "2023-12-31",
+                  "description": "Filter posts until this date",
+                  "disabled": true
+                },
+                {
+                  "key": "search",
+                  "value": "keyword",
+                  "description": "Search in title and content",
+                  "disabled": true
+                },
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number for pagination",
+                  "disabled": true
+                },
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "description": "Number of posts per page",
+                  "disabled": true
+                }
+              ]
+            },
+            "response": []
+          },
+          {
+            "name": "Get Post by ID",
+            "request": {
+              "url": "{{base_url}}/posts/:id",
+              "method": "GET",
+              "description": "Retrieve a specific blog post by ID",
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "post_id_here"
+                }
+              ]
+            },
+            "response": []
+          },
+          {
+            "name": "Create Post",
+            "request": {
+              "url": "{{base_url}}/posts",
+              "method": "POST",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "x-auth-token",
+                  "value": "{{token}}"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n    \"title\": \"My First Blog Post\",\n    \"content\": \"This is the content of my first blog post.\",\n    \"category\": \"Technology\"\n}"
+              },
+              "description": "Create a new blog post (requires authentication)"
+            },
+            "response": []
+          },
+          {
+            "name": "Update Post",
+            "request": {
+              "url": "{{base_url}}/posts/:id",
+              "method": "PUT",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "x-auth-token",
+                  "value": "{{token}}"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n    \"title\": \"Updated Blog Post\",\n    \"content\": \"This is the updated content of my blog post.\",\n    \"category\": \"Technology\"\n}"
+              },
+              "description": "Update an existing blog post (requires authentication)",
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "post_id_here"
+                }
+              ]
+            },
+            "response": []
+          },
+          {
+            "name": "Delete Post",
+            "request": {
+              "url": "{{base_url}}/posts/:id",
+              "method": "DELETE",
+              "header": [
+                {
+                  "key": "x-auth-token",
+                  "value": "{{token}}"
+                }
+              ],
+              "description": "Delete a blog post (requires authentication)",
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "post_id_here"
+                }
+              ]
+            },
+            "response": []
+          },
+          {
+            "name": "Add Comment",
+            "request": {
+              "url": "{{base_url}}/posts/:id/comments",
+              "method": "POST",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "x-auth-token",
+                  "value": "{{token}}"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n    \"content\": \"This is a comment on the blog post.\"\n}"
+              },
+              "description": "Add a comment to a blog post (requires authentication)",
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "post_id_here"
+                }
+              ]
+            },
+            "response": []
+          }
+        ]
+      },
+      {
+        "name": "Users",
+        "item": [
+          {
+            "name": "Get All Users",
+            "request": {
+              "url": "{{base_url}}/users",
+              "method": "GET",
+              "description": "Retrieve all users with pagination and sorting",
+              "params": [
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number for pagination",
+                  "disabled": true
+                },
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "description": "Number of users per page",
+                  "disabled": true
+                },
+                {
+                  "key": "sort",
+                  "value": "name",
+                  "description": "Sort field (e.g., name, email)",
+                  "disabled": true
+                }
+              ]
+            },
+            "response": []
+          },
+          {
+            "name": "Get Own User Profile",
+            "request": {
+              "url": "{{base_url}}/users/profile",
+              "method": "GET",
+              "description": "Get own user profile (requires authentication)",
+              "header": [
+                {
+                  "key": "x-auth-token",
+                  "value": "{{token}}"
+                }
+              ]
+            },
+            "response": []
+          },
+          {
+            "name": "Get User Details",
+            "request": {
+              "url": "{{base_url}}/users/:id",
+              "method": "GET",
+              "description": "Get user details including posts",
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "user_id_here"
+                }
+              ]
+            },
+            "response": []
+          }
+        ]
+      }
+    ]
+  }
