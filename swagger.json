@@ -1,0 +1,645 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "version": "1.0.0",
+      "title": "StoryForge",
+      "description": "API documentation for StoryForge"
+    },
+    "host": "localhost:5000",
+    "basePath": "/api",
+    "schemes": ["http"],
+    "paths": {
+      "/auth/signup": {
+        "post": {
+          "summary": "User signup",
+          "tags": ["Auth"],
+          "parameters": [{
+            "name": "user",
+            "in": "body",
+            "description": "User object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserSignup"
+            }
+          }],
+          "responses": {
+            "201": {
+              "description": "Successful signup",
+              "schema": {
+                "$ref": "#/definitions/AuthResponse"
+              }
+            },
+            "400": {
+              "description": "Bad request"
+            }
+          }
+        }
+      },
+      "/auth/login": {
+        "post": {
+          "summary": "User login",
+          "tags": ["Auth"],
+          "parameters": [{
+            "name": "user",
+            "in": "body",
+            "description": "User credentials",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserLogin"
+            }
+          }],
+          "responses": {
+            "200": {
+              "description": "Successful login",
+              "schema": {
+                "$ref": "#/definitions/AuthResponse"
+              }
+            },
+            "400": {
+              "description": "Bad request"
+            }
+          }
+        }
+      },
+      "/users": {
+        "get": {
+          "summary": "Get all users",
+          "tags": ["Users"],
+          "parameters": [
+            {
+              "name": "page",
+              "in": "query",
+              "type": "integer",
+              "description": "Page number"
+            },
+            {
+              "name": "limit",
+              "in": "query",
+              "type": "integer",
+              "description": "Number of items per page"
+            },
+            {
+              "name": "sort",
+              "in": "query",
+              "type": "string",
+              "description": "Sort field"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful response",
+              "schema": {
+                "$ref": "#/definitions/UsersResponse"
+              }
+            }
+          }
+        }
+      },
+      "/users/profile": {
+        "get": {
+          "summary": "Get user profile",
+          "tags": ["Users"],
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful response",
+              "schema": {
+                "$ref": "#/definitions/UserProfile"
+              }
+            },
+            "404": {
+              "description": "User not found"
+            }
+          }
+        }
+      },
+      "/users/{id}": {
+        "get": {
+          "summary": "Get user details",
+          "tags": ["Users"],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful response",
+              "schema": {
+                "$ref": "#/definitions/UserDetails"
+              }
+            },
+            "404": {
+              "description": "User not found"
+            }
+          }
+        }
+      },
+      "/posts/categories": {
+        "get": {
+          "summary": "Get all post categories",
+          "tags": ["Posts"],
+          "responses": {
+            "200": {
+              "description": "Successful response",
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "/posts": {
+        "get": {
+          "summary": "Get all posts",
+          "tags": ["Posts"],
+          "parameters": [
+            {
+              "name": "sort",
+              "in": "query",
+              "type": "string",
+              "description": "Sort order (e.g. '-createdAt')"
+            },
+            {
+              "name": "category",
+              "in": "query",
+              "type": "string",
+              "description": "Filter by category"
+            },
+            {
+              "name": "search",
+              "in": "query",
+              "type": "string",
+              "description": "Search term"
+            },
+            {
+              "name": "author",
+              "in": "query",
+              "type": "string",
+              "description": "Filter by author ID"
+            },
+            {
+              "name": "startDate",
+              "in": "query",
+              "type": "string",
+              "format": "date",
+              "description": "Start date for filtering"
+            },
+            {
+              "name": "endDate",
+              "in": "query",
+              "type": "string",
+              "format": "date",
+              "description": "End date for filtering"
+            },
+            {
+              "name": "page",
+              "in": "query",
+              "type": "integer",
+              "description": "Page number"
+            },
+            {
+              "name": "limit",
+              "in": "query",
+              "type": "integer",
+              "description": "Number of items per page"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful response",
+              "schema": {
+                "$ref": "#/definitions/PostsResponse"
+              }
+            }
+          }
+        },
+        "post": {
+          "summary": "Create a new post",
+          "tags": ["Posts"],
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "parameters": [{
+            "name": "post",
+            "in": "body",
+            "description": "Post object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PostInput"
+            }
+          }],
+          "responses": {
+            "201": {
+              "description": "Post created successfully",
+              "schema": {
+                "$ref": "#/definitions/Post"
+              }
+            },
+            "400": {
+              "description": "Bad request"
+            }
+          }
+        }
+      },
+      "/posts/{id}": {
+        "get": {
+          "summary": "Get a post by ID",
+          "tags": ["Posts"],
+          "parameters": [{
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }],
+          "responses": {
+            "200": {
+              "description": "Successful response",
+              "schema": {
+                "$ref": "#/definitions/Post"
+              }
+            },
+            "404": {
+              "description": "Post not found"
+            }
+          }
+        },
+        "put": {
+          "summary": "Update a post",
+          "tags": ["Posts"],
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "post",
+              "in": "body",
+              "description": "Updated post object",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/PostInput"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Post updated successfully",
+              "schema": {
+                "$ref": "#/definitions/Post"
+              }
+            },
+            "400": {
+              "description": "Bad request"
+            },
+            "403": {
+              "description": "Not authorized to update this post"
+            },
+            "404": {
+              "description": "Post not found"
+            }
+          }
+        },
+        "delete": {
+          "summary": "Delete a post",
+          "tags": ["Posts"],
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "parameters": [{
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }],
+          "responses": {
+            "200": {
+              "description": "Post deleted successfully"
+            },
+            "403": {
+              "description": "Not authorized to delete this post"
+            },
+            "404": {
+              "description": "Post not found"
+            }
+          }
+        }
+      },
+      "/posts/{id}/comments": {
+        "post": {
+          "summary": "Add a comment to a post",
+          "tags": ["Posts"],
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "comment",
+              "in": "body",
+              "description": "Comment object",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/CommentInput"
+              }
+            }
+          ],
+          "responses": {
+            "201": {
+              "description": "Comment added successfully",
+              "schema": {
+                "$ref": "#/definitions/Comment"
+              }
+            },
+            "400": {
+              "description": "Bad request"
+            },
+            "404": {
+              "description": "Post not found"
+            }
+          }
+        }
+      }
+    },
+    "definitions": {
+      "UserSignup": {
+        "type": "object",
+        "required": ["name", "email", "password"],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "UserLogin": {
+        "type": "object",
+        "required": ["email", "password"],
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "AuthResponse": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string"
+          }
+        }
+      },
+      "PostInput": {
+        "type": "object",
+        "required": ["title", "content", "category"],
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string"
+          }
+        }
+      },
+      "Post": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string"
+          },
+          "author": {
+            "$ref": "#/definitions/User"
+          },
+          "comments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/Comment"
+            }
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "CommentInput": {
+        "type": "object",
+        "required": ["content"],
+        "properties": {
+          "content": {
+            "type": "string"
+          }
+        }
+      },
+      "Comment": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          },
+          "author": {
+            "$ref": "#/definitions/User"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "PostsResponse": {
+        "type": "object",
+        "properties": {
+          "posts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/Post"
+            }
+          },
+          "totalPages": {
+            "type": "integer"
+          },
+          "currentPage": {
+            "type": "integer"
+          },
+          "totalPosts": {
+            "type": "integer"
+          }
+        }
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          }
+        }
+      },
+      "UsersResponse": {
+        "type": "object",
+        "properties": {
+          "users": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "totalPages": {
+            "type": "integer"
+          },
+          "currentPage": {
+            "type": "integer"
+          },
+          "totalUsers": {
+            "type": "integer"
+          }
+        }
+      },
+      "UserProfile": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "$ref": "#/definitions/User"
+          },
+          "posts": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "category": {
+                  "type": "string"
+                },
+                "createdAt": {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              }
+            }
+          },
+          "comments": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "postId": {
+                  "type": "string"
+                },
+                "postTitle": {
+                  "type": "string"
+                },
+                "commentContent": {
+                  "type": "string"
+                },
+                "createdAt": {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              }
+            }
+          }
+        }
+      },
+      "UserDetails": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "$ref": "#/definitions/User"
+          },
+          "posts": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "category": {
+                  "type": "string"
+                },
+                "createdAt": {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "securityDefinitions": {
+      "bearerAuth": {
+        "type": "apiKey",
+        "name": "Authorization",
+        "in": "header"
+      }
+    }
+  }

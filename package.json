@@ -4,29 +4,30 @@
     "description": "A basic blog application with RESTful API",
     "main": "src/server.js",
     "scripts": {
-      "start": "node src/server.js",
-      "dev": "nodemon src/server.js",
-      "test": "echo \"Error: no test specified\" && exit 1"
+        "start": "node src/server.js",
+        "dev": "nodemon src/server.js",
+        "test": "echo \"Error: no test specified\" && exit 1"
     },
     "keywords": [
-      "blog",
-      "api",
-      "express",
-      "mongodb"
+        "blog",
+        "api",
+        "express",
+        "mongodb"
     ],
     "author": "Your Name",
     "license": "ISC",
     "dependencies": {
-      "bcryptjs": "^2.4.3",
-      "cors": "^2.8.5",
-      "dotenv": "^10.0.0",
-      "express": "^4.17.1",
-      "joi": "^17.4.2",
-      "jsonwebtoken": "^8.5.1",
-      "mongoose": "^6.0.12",
-      "swagger-ui-express": "^4.1.6"
+        "bcryptjs": "^2.4.3",
+        "cors": "^2.8.5",
+        "dotenv": "^10.0.0",
+        "express": "^4.17.1",
+        "joi": "^17.4.2",
+        "jsonwebtoken": "^8.5.1",
+        "mongoose": "^6.0.12",
+        "swagger-jsdoc": "^6.2.8",
+        "swagger-ui-express": "^4.6.3"
     },
     "devDependencies": {
-      "nodemon": "^2.0.14"
+        "nodemon": "^2.0.14"
     }
-  }
+}
