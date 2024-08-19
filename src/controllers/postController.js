@@ -171,23 +171,24 @@ exports.deletePost = async (req, res, next) => {
 };
 
 exports.addComment = async (req, res, next) => {
-    try {
-      const { error } = validateComment(req.body);
-      if (error) return res.status(400).json({ message: error.details[0].message });
-  
-      const post = await Post.findById(req.params.id);
-      if (!post) return res.status(404).json({ message: 'Post not found' });
-  
-      const comment = {
-        content: req.body.content,
-        author: req.user.id,
-      };
-  
-      post.comments.push(comment);
-      await post.save();
-  
-      res.status(201).json(post);
-    } catch (error) {
-      next(error);
-    }
-  };
+  try {
+    const { error } = validateComment(req.body);
+    if (error) return res.status(400).json({ message: error.details[0].message });
+
+    const post = await Post.findById(req.params.id);
+    if (!post) return res.status(404).json({ message: 'Post not found' });
+
+    const comment = {
+      content: req.body.content,
+      author: req.user.id,
+    };
+
+    post.comments.push(comment);
+    await post.save();
+
+    const newComment = post.comments[post.comments.length - 1];
+    res.status(201).json(newComment);
+  } catch (error) {
+    next(error);
+  }
+};
