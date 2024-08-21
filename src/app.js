@@ -6,12 +6,15 @@ const authRoutes = require('./routes/authRoutes');
 const postRoutes = require('./routes/postRoutes');
 const userRoutes = require('./routes/userRoutes');
 const errorHandler = require('./middleware/errorHandler');
+require('dotenv').config();
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
-
+app.use(cors({
+    origin: process.env.BLOG_CLIENT_URL
+  }));
 app.use('/', (req, res) => {
    res.send("server is on ");
 });
