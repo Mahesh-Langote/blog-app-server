@@ -15,7 +15,7 @@ app.use(express.json());
 app.use(cors({
     origin: process.env.BLOG_CLIENT_URL
   }));
-app.use('/', (req, res) => {
+app.use('/test-server', (req, res) => {
    res.send("server is on ");
 });
 
