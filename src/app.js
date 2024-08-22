@@ -18,7 +18,7 @@ app.use(cors({
 app.use('/test-server', (req, res) => {
    res.send("server is on ");
 });
-
+app.use('/swagger-ui', express.static('node_modules/swagger-ui-dist/'));
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use('/api/auth', authRoutes);
 app.use('/api/posts', postRoutes);
