@@ -35,7 +35,7 @@ exports.getAllPosts = async (req, res, next) => {
       startDate,
       endDate,
       page = 1, 
-      limit = 10 
+      limit = 12 
     } = req.query;
 
     const query = {};
