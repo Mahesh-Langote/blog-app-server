@@ -15,6 +15,7 @@
       "src": "/swagger-ui/(.*)",
       "dest": "/public/swagger-ui/$1"
     },
+    { "src": "/[^.]+", "dest": "/", "status": 200 },
     {
       "src": "/(.*)",
       "dest": "src/server.js"
